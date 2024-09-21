@@ -77,9 +77,11 @@ const handleSubmit = async () => {
     if (boxFlag.value == true) {
       // 登录逻辑
       await loginFormRef.value.validate()
-      await loginReq(LoginFormData.value)
+      const res = await loginReq(LoginFormData.value)
       // 登录成功后的逻辑..
-      router.push('/')
+      // router.push('/')
+      localStorage.setItem('accessToken', res.accessToken)
+      localStorage.setItem('refreshToken', res.refreshToken)
       message.success('登录成功')
       regFormRef.value.resetFields() // 调用 resetFields 方法
     }

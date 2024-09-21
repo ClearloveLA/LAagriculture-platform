@@ -37,7 +37,5 @@ import HeaderBar from '@/components/HeaderBar.vue'
     -1px -1px 1px #236f79,
     0 0 10px #99f6ff,
     0 0 20px #50adeb;
-  h1 {
-  }
 }
 </style>

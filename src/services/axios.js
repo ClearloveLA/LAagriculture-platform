@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { message } from 'ant-design-vue'
+import router from '@/router'
 
 // 创建axios示例
 const api = axios.create({
@@ -12,7 +13,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     // 如果有token，将其添加到请求头中
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('accessToken')
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`
     }
@@ -37,8 +38,42 @@ api.interceptors.response.use(
       return res
     }
   },
-  (error) => {
+  async (error) => {
     // 响应错误处理
+    const originalRequest = error.config
+
+    // 检查是否为401错误并且没有重试过
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      !originalRequest._retry
+    ) {
+      // 标记 避免重复循环请求token
+      originalRequest._retry = true
+
+      // 检查刷新token
+      try {
+        const refreshToken = localStorage.getItem('refreshToken')
+        if (!refreshToken) {
+          throw new Error('无刷新token, 请重新登录')
+        }
+
+        // 有刷新token 生成新的访问token
+        const res = await api.post('/refreshToken')
+        const { accessToken: newAccessToken } = res
+        // 更新token
+        localStorage.setItem('accessToken', newAccessToken)
+
+        // 更新原始请求的token 重试请求 无感刷新
+        originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`
+        return api(originalRequest)
+      } catch (error) {
+        // 刷新token请求失败 重定向
+        message.error('登录已过期，请重新登录')
+        router.push('/auth')
+        return Promise.reject(error)
+      }
+    }
     message.error(error.response?.data?.message || '请求失败')
     return Promise.reject(error)
   }
