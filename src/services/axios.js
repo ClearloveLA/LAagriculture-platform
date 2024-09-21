@@ -5,7 +5,7 @@ import { message } from 'ant-design-vue'
 const api = axios.create({
   // eslint-disable-next-line no-undef
   baseURL: 'http://localhost:3000/api',
-  timeout: 2000
+  timeout: 3000
 })
 
 // 请求拦截器
