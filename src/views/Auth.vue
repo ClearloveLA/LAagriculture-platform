@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { message } from 'ant-design-vue'
 import { registerReq, loginReq } from '../services/api'
+import router from '@/router'
 
 const loginFormRef = ref(null)
 const LoginFormData = ref({
@@ -77,13 +78,20 @@ const handleSubmit = async () => {
       // 登录逻辑
       await loginFormRef.value.validate()
       await loginReq(LoginFormData.value)
+      // 登录成功后的逻辑..
+      router.push('/')
       message.success('登录成功')
+      regFormRef.value.resetFields() // 调用 resetFields 方法
     }
     if (boxFlag.value == false) {
       // 注册逻辑
       await regFormRef.value.validate()
       await registerReq(regFormData.value)
-      message.success('注册成功')
+      message.success('注册成功, 去登陆')
+      LoginFormData.value = regFormData.value
+      setTimeout(() => {
+        boxFlag.value = !boxFlag.value
+      }, 800)
     }
   } catch (error) {
     console.log(error)
