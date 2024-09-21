@@ -1,3 +1,97 @@
+<script setup>
+import { ref } from 'vue'
+import { message } from 'ant-design-vue'
+import { registerReq, loginReq } from '../services/api'
+
+const loginFormRef = ref(null)
+const LoginFormData = ref({
+  username: '',
+  phone: '',
+  password: ''
+})
+
+const regFormRef = ref(null)
+const regFormData = ref({
+  username: '',
+  password: '',
+  email: '',
+  phone: '',
+  userType: ''
+})
+
+const boxFlag = ref(true)
+const toggleBoxFlag = () => {
+  boxFlag.value = !boxFlag.value
+}
+
+// 登录表单校验规则
+const loginRules = {
+  username: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { max: 16, message: '用户名最多为16个字符', trigger: 'blur' }
+  ],
+  phone: [
+    { required: true, message: '请输入手机号', trigger: 'blur' },
+    {
+      pattern: /^1[3-9]\d{9}$/, // 自定义手机号正则表达式
+      message: '请输入正确的手机号',
+      trigger: 'blur'
+    }
+  ],
+  password: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { min: 6, message: '密码至少需要6个字符', trigger: 'blur' }
+  ]
+}
+
+// 注册表单校验规则
+const regRules = {
+  username: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { max: 16, message: '用户名最多为16个字符', trigger: 'blur' }
+  ],
+  password: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { min: 6, message: '密码至少需要6个字符', trigger: 'blur' }
+  ],
+  email: [
+    { required: true, message: '请输入邮箱', trigger: 'blur' },
+    { type: 'email', message: '请输入有效的邮箱地址', trigger: 'blur' }
+  ],
+  phone: [
+    { required: true, message: '请输入手机号', trigger: 'blur' },
+    {
+      pattern: /^1[3-9]\d{9}$/, // 自定义手机号正则表达式
+      message: '请输入正确的手机号',
+      trigger: 'blur'
+    }
+  ],
+  userType: [{ required: true, message: '请选择身份', trigger: 'blur' }]
+}
+
+// 处理提交按钮的方法
+const handleSubmit = async () => {
+  try {
+    // 检验状态
+    if (boxFlag.value == true) {
+      // 登录逻辑
+      await loginFormRef.value.validate()
+      const res = await loginReq(LoginFormData.value)
+      message.success('登录成功')
+      console.log(res)
+    }
+    if (boxFlag.value == false) {
+      // 注册逻辑
+      await regFormRef.value.validate()
+      const res = await registerReq(regFormData.value)
+      message.success('注册成功')
+      console.log(res)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+</script>
 <template>
   <div class="auth">
     <div class="auth-box">
@@ -69,7 +163,7 @@
           <h1>登录</h1>
           <a-form
             class="form"
-            :model="LoginregFormData"
+            :model="LoginFormData"
             :rules="loginRules"
             ref="loginFormRef"
             :label-col="{ span: 4 }"
@@ -77,23 +171,24 @@
           >
             <a-form-item name="username">
               <a-input
-                v-model:value="LoginregFormData.username"
+                v-model:value="LoginFormData.username"
                 placeholder="请输入用户名"
+              />
+            </a-form-item>
+            <a-form-item name="phone">
+              <a-input
+                v-model:value="LoginFormData.phone"
+                placeholder="请输入手机号"
               />
             </a-form-item>
             <a-form-item name="password">
               <a-input
-                v-model:value="LoginregFormData.password"
+                v-model:value="LoginFormData.password"
                 type="password"
                 placeholder="请输入密码"
               />
             </a-form-item>
-            <a-form-item name="email">
-              <a-input
-                v-model:value="LoginregFormData.email"
-                placeholder="请输入邮箱"
-              />
-            </a-form-item>
+
             <a-form-item :wrapper-col="{ offset: 4, span: 16 }">
               <button @click="handleSubmit">登录</button>
             </a-form-item>
@@ -103,81 +198,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue'
-import { message } from 'ant-design-vue'
-
-const loginFormRef = ref(null)
-const LoginregFormData = ref({
-  username: '',
-  password: '',
-  email: ''
-})
-
-const regFormRef = ref(null)
-const regFormData = ref({
-  username: '',
-  password: '',
-  email: '',
-  phone: '',
-  userType: ''
-})
-
-const boxFlag = ref(true)
-const toggleBoxFlag = () => {
-  boxFlag.value = !boxFlag.value
-}
-
-// 登录表单校验规则
-const loginRules = {
-  username: [
-    { required: true, message: '请输入用户名', trigger: 'blur' },
-    { max: 16, message: '用户名最多为16个字符', trigger: 'blur' }
-  ],
-  password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '密码至少需要6个字符', trigger: 'blur' }
-  ],
-  email: [
-    { required: true, message: '请输入邮箱', trigger: 'blur' },
-    { type: 'email', message: '请输入有效的邮箱地址', trigger: 'blur' }
-  ]
-}
-
-// 注册表单校验规则
-const regRules = {
-  username: [
-    { required: true, message: '请输入用户名', trigger: 'blur' },
-    { max: 16, message: '用户名最多为16个字符', trigger: 'blur' }
-  ],
-  password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '密码至少需要6个字符', trigger: 'blur' }
-  ],
-  email: [
-    { required: true, message: '请输入邮箱', trigger: 'blur' },
-    { type: 'email', message: '请输入有效的邮箱地址', trigger: 'blur' }
-  ],
-  phone: [
-    { required: true, message: '请输入手机号', trigger: 'blur' },
-    { type: 'phone', message: '请输入正确的手机号', trigger: 'blur' }
-  ],
-  userType: [{ required: true, message: '请选择身份', trigger: 'blur' }]
-}
-
-const handleSubmit = () => {
-  loginFormRef.value
-    .validate()
-    .then(() => {
-      message.success('登录成功成功')
-      // 提交逻辑
-    })
-    .catch(() => {
-      message.error('请检查全部输入信息')
-    })
-}
-</script>
 
 <style scoped>
 .auth {
