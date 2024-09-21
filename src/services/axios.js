@@ -4,7 +4,7 @@ import { message } from 'ant-design-vue'
 // 创建axios示例
 const api = axios.create({
   // eslint-disable-next-line no-undef
-  baseURL: 'http://localhost:3000/api',
+  baseURL: import.meta.env.VITE_API_URL,
   timeout: 3000
 })
 

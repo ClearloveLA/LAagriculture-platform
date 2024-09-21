@@ -76,16 +76,14 @@ const handleSubmit = async () => {
     if (boxFlag.value == true) {
       // 登录逻辑
       await loginFormRef.value.validate()
-      const res = await loginReq(LoginFormData.value)
+      await loginReq(LoginFormData.value)
       message.success('登录成功')
-      console.log(res)
     }
     if (boxFlag.value == false) {
       // 注册逻辑
       await regFormRef.value.validate()
-      const res = await registerReq(regFormData.value)
+      await registerReq(regFormData.value)
       message.success('注册成功')
-      console.log(res)
     }
   } catch (error) {
     console.log(error)
