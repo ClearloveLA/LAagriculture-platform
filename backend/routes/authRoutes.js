@@ -1,7 +1,10 @@
 const express = require('express')
 // 引入控制器
-const { register, login } = require('../crotrollers/authController')
+const { register, login, refreshToken } = require('../crotrollers/authController')
 const router = express.Router()
+
+// 定义刷新token路由
+router.post('refreshToken', refreshToken)
 
 // 定义注册路由
 router.post('/register', register)

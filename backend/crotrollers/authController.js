@@ -122,7 +122,6 @@ exports.login = async (req, res) => {
       refreshToken
     })
   } catch (err) {
-    console.log(err)
     res.status(500).json({
       message: '服务器错误',
       error:err.message
