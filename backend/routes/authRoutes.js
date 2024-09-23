@@ -4,7 +4,7 @@ const { register, login, refreshToken } = require('../controllers/authController
 const router = express.Router()
 
 // 定义刷新token路由
-router.post('refreshToken', refreshToken)
+router.post('/refreshToken', refreshToken)
 
 // 定义注册路由
 router.post('/register', register)
