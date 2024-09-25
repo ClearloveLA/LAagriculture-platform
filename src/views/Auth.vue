@@ -79,7 +79,7 @@ const handleSubmit = async () => {
       await loginFormRef.value.validate()
       const res = await loginReq(LoginFormData.value)
       // 登录成功后的逻辑..
-      // router.push('/')
+      router.push('/')
       localStorage.setItem('accessToken', res.accessToken)
       localStorage.setItem('refreshToken', res.refreshToken)
       message.success('登录成功')

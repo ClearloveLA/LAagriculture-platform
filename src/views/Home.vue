@@ -9,7 +9,7 @@ import HeaderBar from '@/components/HeaderBar.vue'
       <img src="../assets/images/banner.png" alt="" />
       <div class="des">
         <span>欢迎来到</span>
-        <h1>李昂大哥哥庄园</h1>
+        <h1>果然好链</h1>
       </div>
     </div>
   </div>
@@ -25,11 +25,12 @@ import HeaderBar from '@/components/HeaderBar.vue'
   }
 }
 .des {
+  user-select: none; /* CSS3属性 */
   color: #fff;
   bottom: 0;
-  right: 0;
+  right: 2vw;
   position: absolute;
-  font-size: 60px;
+  font-size: 55px;
   color: transparent;
   text-shadow:
     0 0 5px #10aaec,
