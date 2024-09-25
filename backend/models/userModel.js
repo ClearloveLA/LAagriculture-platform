@@ -42,6 +42,11 @@ const User = {
       'UPDATE users SET refresh_token = ? WHERE user_id = ?',
       [refreshToken, userId]
     )
+  },
+  // 获取个人信息的方法
+  async getUserInfo(id) {
+    const [rows] = await db.execute('SELECT * FROM users WHERE user_id = ?', [id])
+    return rows[0]
   }
 }
 

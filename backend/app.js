@@ -5,6 +5,7 @@ const cors = require('cors')
 const app = express()
 const authRoutes = require('./routes/authRoutes')
 const productRoutes = require('./routes/productRoutes')
+const userRoutes = require('./routes/userRoutes')
 
 // 中间件
 app.use(cors())
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', authRoutes)
 app.use('/api/products', productRoutes)
+app.use('/api/user', userRoutes)
 
 // 启动服务器
 const PORT = process.env.PORT || 3000;

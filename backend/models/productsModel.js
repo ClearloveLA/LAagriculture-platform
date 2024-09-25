@@ -14,9 +14,9 @@ const product = {
   },
   // 获取全部商品信息的方法
   async getAll(query, limit, offset) {
+    console.log(query)
     const searchQuery = `%${query}%`
     
-
     // 获取符合条件的产品列表
     // 使用字符串拼接代替参数传递
     const queryStr = `SELECT * FROM products WHERE name LIKE ? OR category LIKE ? LIMIT ${limit} OFFSET ${offset}`

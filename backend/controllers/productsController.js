@@ -23,7 +23,7 @@ exports.addProduct = async (req, res) => {
 // 获取所有产品 GET /products?page=1&pageSize=10&query=水果
 exports.getProduct = async (req, res) => {
   // 默认值 没参数的情况下
-  let { page = 1, pageSize = 8, query = '' } = req.query
+  let { page = 1, pageSize = 20, query = '' } = req.query
 
   try {
     // 计算分页的偏移量
@@ -50,7 +50,9 @@ exports.getProduct = async (req, res) => {
 
 // 获取单个商品 GET /:id
 exports.getProductById = async (req, res) => {
+  console.log(req.params)
   const { id } = req.params
+  console.log(id)
   try {
     // 从数据库中获取id产品
     const productItem = await product.getById(id)
