@@ -1,5 +1,6 @@
 <script setup>
 import HeaderBar from '@/components/HeaderBar.vue'
+import RecommnedBar from '@/components/RecommnedBar.vue'
 </script>
 
 <template>
@@ -12,6 +13,7 @@ import HeaderBar from '@/components/HeaderBar.vue'
         <h1>果然好链</h1>
       </div>
     </div>
+    <RecommnedBar></RecommnedBar>
   </div>
 </template>
 <style scoped>

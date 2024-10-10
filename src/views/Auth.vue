@@ -81,6 +81,7 @@ const handleSubmit = async () => {
       // 登录成功后的逻辑..
       router.push('/')
       localStorage.setItem('accessToken', res.accessToken)
+      localStorage.setItem('uid', res.uid)
       localStorage.setItem('refreshToken', res.refreshToken)
       message.success('登录成功')
       regFormRef.value.resetFields() // 调用 resetFields 方法

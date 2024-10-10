@@ -64,7 +64,10 @@ const goBack = () => {
                 <span class="category">类别: {{ product.category }}</span>
               </div>
 
-              <a-button type="primary" size="large" class="buy-button" block>
+              <a-button size="large" class="buy-button buyCar" block>
+                加入购物车
+              </a-button>
+              <a-button size="large" class="buy-button" block>
                 立即购买
               </a-button>
             </div>
@@ -161,10 +164,17 @@ h2 {
 }
 
 .buy-button {
+  color: #000;
+  font-weight: bold;
+  margin-right: 10px;
+  width: 150px;
   margin-top: 24px;
-  background-color: #1890ff;
   border-radius: 8px;
   font-size: 18px;
   height: 48px;
+}
+
+.buyCar {
+  background-color: #999;
 }
 </style>

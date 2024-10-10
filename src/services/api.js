@@ -42,3 +42,49 @@ export const getProductsItemReq = async (id) => {
     throw new Error(error?.response?.data?.message || '获取商品失败')
   }
 }
+
+// 删除商品请求 (farmer)
+export const delProductItemReq = async (id) => {
+  try {
+    const res = await api.del(`/products/${id}`)
+    return res
+  } catch (error) {
+    throw new Error(error?.response?.data?.message || '删除商品失败')
+  }
+}
+
+// 更新商品请求 (farmer)
+export const updateProductItemReq = async (item) => {
+  try {
+    const res = await api.post('products', item)
+    return res
+  } catch (error) {
+    throw new Error(error?.response?.data?.message || '更新商品失败')
+  }
+}
+
+// ------------------------------------------
+// 获取个人信息请求
+export const getUserInfoReq = async (id) => {
+  try {
+    const res = await api.get('/user', {
+      params: {
+        id
+      }
+    })
+    return res
+  } catch (error) {
+    throw new Error(error?.response?.data?.message || '获取个人资料失败')
+  }
+}
+
+// 更新个人信息请求
+export const updateUserInfoReq = async (id, userInfo) => {
+  try {
+    // 使用 PUT 请求更新用户信息，并传递用户 ID
+    const res = await api.put(`/user/${id}`, userInfo)
+    return res
+  } catch (error) {
+    throw new Error(error?.response?.data?.message || '更新个人信息失败')
+  }
+}

@@ -64,77 +64,90 @@ onMounted(() => {
 
 <template>
   <HeaderBar></HeaderBar>
-  <div class="container">
-    <!-- 搜索栏 -->
-    <div class="search-bar">
-      <a-input-search
-        v-model:value="searchQuery"
-        placeholder="搜索商品名称或类别"
-        enter-button="搜索"
-        @search="handleSearch"
-      />
-    </div>
+  <div class="all">
+    <div class="container">
+      <!-- 搜索栏 -->
+      <div class="search-bar">
+        <a-input-search
+          v-model:value="searchQuery"
+          placeholder="搜索商品名称或类别"
+          enter-button="搜索"
+          @search="handleSearch"
+        />
+      </div>
 
-    <!-- 商品列表 -->
-    <a-spin :spinning="loading">
-      <a-row :gutter="16">
-        <a-col
-          v-for="product in products"
-          :key="product.product_id"
-          :xs="24"
-          :sm="12"
-          :md="8"
-          :lg="6"
-          style="margin-bottom: 24px"
-        >
-          <!-- 商品卡片 -->
-          <a-card
-            :hoverable="true"
-            class="product-card"
-            @click="goToProductDetail(product.product_id)"
+      <!-- 商品列表 -->
+      <a-spin :spinning="loading" class="list">
+        <a-row :gutter="16">
+          <a-col
+            v-for="product in products"
+            :key="product.product_id"
+            :xs="24"
+            :sm="12"
+            :md="8"
+            :lg="6"
+            style="margin-bottom: 24px"
           >
-            <template #cover>
-              <img
-                v-if="1"
-                src="../assets/images/bg1.png"
-                alt="product.name"
-                class="product-image"
+            <!-- 商品卡片 -->
+            <a-card
+              :hoverable="true"
+              class="product-card"
+              @click="goToProductDetail(product.product_id)"
+            >
+              <template #cover>
+                <div class="title">Hot</div>
+                <div class="product-image" v-if="1">
+                  <img
+                    src="../assets/images/bg1.png"
+                    alt="product.name"
+                    class=""
+                  />
+                  <div class="icon">
+                    <div
+                      class="icon-item"
+                      v-for="(item, index) in 3"
+                      :key="index"
+                    ></div>
+                  </div>
+                </div>
+                <div v-else class="image-placeholder">无图片</div>
+              </template>
+              <a-card-meta
+                :title="product.name"
+                :description="product.description"
               />
-              <div v-else class="image-placeholder">无图片</div>
-            </template>
-            <a-card-meta
-              :title="product.name"
-              :description="product.description"
-            />
-            <div class="product-info">
-              <span class="price">价格: ¥{{ product.price }}</span>
-              <span class="stock">库存: {{ product.stock_quantity }}</span>
-            </div>
-          </a-card>
-        </a-col>
-      </a-row>
+              <div class="product-info">
+                <span class="price">价格: ¥{{ product.price }}</span>
+                <span class="stock">库存: {{ product.stock_quantity }}</span>
+              </div>
+            </a-card>
+          </a-col>
+        </a-row>
 
-      <!-- 分页器 -->
-      <a-pagination
-        :total="totalProducts"
-        :pageSize="pageSize"
-        :current="currentPage"
-        showSizeChanger
-        showQuickJumper
-        @change="handlePageChange"
-        style="margin-top: 20px; text-align: center"
-      />
-    </a-spin>
+        <!-- 分页器 -->
+        <a-pagination
+          :total="totalProducts"
+          :pageSize="pageSize"
+          :current="currentPage"
+          showSizeChanger
+          showQuickJumper
+          @change="handlePageChange"
+          style="margin-top: 20px; text-align: center"
+        />
+      </a-spin>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.all {
+  background-color: #f5f7ea;
+}
 .container {
   margin: 0 auto;
   width: 1200px;
   padding: 20px;
   padding-top: 15vh;
-  background-color: #f9f9f9;
   min-height: 100vh;
 }
 
@@ -144,6 +157,7 @@ onMounted(() => {
 }
 
 .product-card {
+  position: relative;
   height: auto;
   transition: box-shadow 0.3s ease;
   border-radius: 8px;
@@ -154,11 +168,22 @@ onMounted(() => {
 }
 
 .product-image {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 8px 8px 0 0;
+  margin: 10px auto 0 auto;
+  width: 92%;
+  overflow: hidden;
+  border-radius: 10px;
+  height: 260px;
+  img {
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s;
+  }
 }
+
+.product-image img:hover {
+  transform: scale(1.05);
+}
+
 
 .image-placeholder {
   width: 100%;
@@ -167,7 +192,7 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   background-color: #f0f0f0;
-  border-radius: 8px 8px 0 0;
+  border-radius: 8px;
   font-size: 16px;
   color: #999;
 }
@@ -179,13 +204,54 @@ onMounted(() => {
 }
 
 .price {
-  font-size: 18px;
-  font-weight: bold;
-  color: #2284d4;
+  font-size: 13px;
+  color: #555;
 }
 
 .stock {
-  font-size: 14px;
+  font-size: 13px;
   color: #555;
+}
+
+.title {
+  z-index: 99;
+  font-size: 13px;
+  text-align: center;
+  color: #fff;
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  border-radius: 5px;
+  width: 60px;
+  height: 20px;
+  background-color: #017d03;
+}
+
+.icon {
+  opacity: 0;
+  top: 87.5px;
+  right: -5px;
+  position: absolute;
+  transition: all 0.5s ease-in-out;
+  width: 30px;
+  height: 105px;
+  .icon-item {
+    transition: all 0.5s ease-in-out;
+    border-radius: 16px;
+    width: 30px;
+    height: 30px;
+    margin-bottom: 5px;
+    background-color: #fff;
+  }
+}
+
+.product-card:hover {
+  .icon {
+    opacity: 1;
+    transform: translateX(-20px);
+  }
+  .icon-item:hover {
+    background-color: #017d03;
+  }
 }
 </style>

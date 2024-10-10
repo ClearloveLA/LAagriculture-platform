@@ -1,6 +1,11 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { message } from 'ant-design-vue'
+
 const accessToken = localStorage.getItem('accessToken')
+const router = useRouter()
+
 // 导航项数据
 const navItems = ref([
   { name: '主页', path: '/', icon: '/src/assets/images/small-logo.png' },
@@ -9,18 +14,21 @@ const navItems = ref([
     path: '/products',
     icon: '/src/assets/images/small-logo.png'
   },
-  { name: '社区', path: '/', icon: '/src/assets/images/small-logo.png' },
-  {
-    name: '直播',
-    path: '/',
-    icon: '/src/assets/images/small-logo.png'
-  },
-  {
-    name: accessToken ? '个人中心' : '去登陆',
-    path: '/auth',
-    icon: '/src/assets/images/small-logo.png'
-  }
+  { name: '社区', path: '/forum', icon: '/src/assets/images/small-logo.png' },
+  { name: '直播', path: '/', icon: '/src/assets/images/small-logo.png' }
 ])
+
+// 跳转到个人中心的各个页面
+const navigateTo = (path) => {
+  router.push(path)
+}
+
+// 退出登录
+const handleLogout = () => {
+  localStorage.removeItem('accessToken')
+  message.success('成功退出登录')
+  router.push('/auth') // 跳转到登录页面
+}
 </script>
 
 <template>
@@ -40,6 +48,40 @@ const navItems = ref([
           <img :src="item.icon" alt="" />
         </router-link>
       </li>
+
+      <!-- 如果用户已登录显示个人中心下拉菜单 -->
+      <li v-if="accessToken">
+        <a-dropdown>
+          <a class="ant-dropdown-link" @click.prevent>
+            个人中心 <img src="/src/assets/images/small-logo.png" alt="" />
+          </a>
+          <!-- 下拉菜单 -->
+          <template #overlay>
+            <a-menu>
+              <a-menu-item key="profile" @click="navigateTo('/profile')">
+                个人资料
+              </a-menu-item>
+              <a-menu-item key="orders" @click="navigateTo('/orders')">
+                我的订单
+              </a-menu-item>
+              <a-menu-item key="reviews" @click="navigateTo('/reviews')">
+                我的评价
+              </a-menu-item>
+              <a-menu-item key="reviews" @click="navigateTo('/reviews')">
+                我的购物车
+              </a-menu-item>
+              <a-menu-item key="logout" @click="handleLogout">
+                退出登录
+              </a-menu-item>
+            </a-menu>
+          </template>
+        </a-dropdown>
+      </li>
+
+      <!-- 如果未登录显示去登录 -->
+      <li v-else>
+        <router-link to="/auth">去登录</router-link>
+      </li>
     </ul>
   </header>
 </template>
@@ -48,7 +90,7 @@ const navItems = ref([
 header {
   position: fixed;
   width: 100%;
-  z-index: 99;
+  z-index: 9999999;
   padding: 10px 30px 10px 50px;
   display: flex;
   justify-content: space-between;
